@@ -23,4 +23,4 @@ builder.Services.AddSingleton<AlunoService>();
 
 ---
 
-por Cássio Andreatta
+by Cássio Andreatta
