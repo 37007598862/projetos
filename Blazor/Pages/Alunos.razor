@@ -1,0 +1,62 @@
+@page "/alunos"
+@inject BlazorAlunoCrud.Data.AlunoService alunoService
+
+<h3>Cadastro de Alunos</h3>
+
+<input placeholder="Nome" @bind="novoAluno.Nome" />
+<input placeholder="Email" @bind="novoAluno.Email" />
+<button @onclick="AdicionarAluno">Adicionar</button>
+
+<hr />
+
+<table>
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var aluno in alunoService.Listar())
+        {
+            <tr>
+                <td>@aluno.Nome</td>
+                <td>@aluno.Email</td>
+                <td>
+                    <button @onclick="() => Editar(aluno)">Editar</button>
+                    <button @onclick="() => Remover(aluno.Id)">Remover</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    private BlazorAlunoCrud.Models.Aluno novoAluno = new();
+
+    void AdicionarAluno()
+    {
+        if (novoAluno.Id == 0)
+            alunoService.Adicionar(novoAluno);
+        else
+            alunoService.Editar(novoAluno);
+
+        novoAluno = new();
+    }
+
+    void Editar(BlazorAlunoCrud.Models.Aluno aluno)
+    {
+        novoAluno = new BlazorAlunoCrud.Models.Aluno
+        {
+            Id = aluno.Id,
+            Nome = aluno.Nome,
+            Email = aluno.Email
+        };
+    }
+
+    void Remover(int id)
+    {
+        alunoService.Remover(id);
+    }
+}
